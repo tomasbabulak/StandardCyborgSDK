@@ -13,7 +13,7 @@ const char *SCFrameworkVersion() {
     static const char *__version;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSBundle *frameworkBundle = [NSBundle bundleWithIdentifier:@"com.standardcyborg.StandardCyborgFusion"];
+        NSBundle *frameworkBundle = [NSBundle bundleWithIdentifier:@"com.babulaktomas.StandardCyborgFusion"];
         NSString *frameworkVersionString = [frameworkBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
         __version = [frameworkVersionString UTF8String];
     });

@@ -66,7 +66,7 @@ MetalSurfelIndexMap::MetalSurfelIndexMap(id<MTLDevice> device, id<MTLCommandQueu
     _commandQueue(commandQueue)
 {
     NSError *error;
-    _library = [_device newDefaultLibraryWithBundle:[NSBundle bundleWithIdentifier:@"com.standardcyborg.StandardCyborgFusion"] error:&error];
+    _library = [_device newDefaultLibraryWithBundle:[NSBundle bundleWithIdentifier:@"com.babulaktomas.StandardCyborgFusion"] error:&error];
     if (_library == nil) { NSLog(@"Unable to create library: %@", error); }
     
     id<MTLFunction> vertexFunction = [_library newFunctionWithName:forColor ? @"SurfelIndexMapForColorVertex" : @"SurfelIndexMapVertex"];
