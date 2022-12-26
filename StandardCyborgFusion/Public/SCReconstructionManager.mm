@@ -455,6 +455,7 @@ NS_ASSUME_NONNULL_BEGIN
                  withCentreOffset: (simd_float3) centreOffset
                       boundingBox: (simd_float2x3) boundingBox
                    modelTransform: (simd_float4x4) modelTransform
+                      pointOffset: (simd_float3) pointOffset
 {
     const Surfels& surfels = _modelQueue_model->getSurfels();
 
