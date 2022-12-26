@@ -45,7 +45,7 @@ vertex ProjectedVertex DrawPointCloudVertex(Vertex v [[stage_in]],
     float4 projected = uniforms->projection * uniforms->view * uniforms->model * float4(position, 1.0);
     
     // To color by normals:
-    // float3 color = 0.5 + 0.5 * normalize(normal);
+//     float3 color = 0.5 + 0.5 * normalize(normal);
     
     float3 color = pow(instance.color, 1.0 / 2.2);
 
