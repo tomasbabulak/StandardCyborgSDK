@@ -103,6 +103,13 @@ NS_SWIFT_NAME(accumulate(depthBuffer:colorBuffer:calibrationData:));
 /** May be called at any point during or after scanning to build a copy of the currently reconstructed point cloud */
 - (SCPointCloud *)buildPointCloud;
 
+/** May be called at any point during or after scanning to build a copy of the currently reconstructed point cloud, cropped by a sphere*/
+- (SCPointCloud *)buildPointCloud: (float) radius
+                 withCentreOffset: (simd_float3) centreOffset
+                      boundingBox: (simd_float2x3) boundingBox
+                   modelTransform: (simd_float4x4) modelTransform
+                      pointOffset: (simd_float3) pointOffset;
+
 @end
 
 
