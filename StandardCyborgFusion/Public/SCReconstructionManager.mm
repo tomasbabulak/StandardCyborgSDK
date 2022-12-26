@@ -442,6 +442,82 @@ NS_ASSUME_NONNULL_BEGIN
     return [[SCPointCloud alloc] initWithSurfelData:surfelData gravity:gravity];
 }
 
+////(simd_float4x4) modelTransform
+////pointLocation:
+//- (bool) isBehindPlane: (simd_float3) point
+//{
+//    // set plane on z = 0
+//    return point.z >= 0;
+////    return simd_mul(modelTransform, simd_make_float4(point, 1.0)).z >= 0;
+//}
+
+- (SCPointCloud *)buildPointCloud: (float) radius
+                 withCentreOffset: (simd_float3) centreOffset
+                      boundingBox: (simd_float2x3) boundingBox
+                   modelTransform: (simd_float4x4) modelTransform
+{
+    const Surfels& surfels = _modelQueue_model->getSurfels();
+
+    printf("**** count - unf : %zd\n", surfels.size());
+
+    float xSize = boundingBox.columns[0].x + boundingBox.columns[1].x;
+    float ySize = boundingBox.columns[0].y + boundingBox.columns[1].y;
+    float zSize = boundingBox.columns[0].z + boundingBox.columns[1].z;
+
+    // TODO: Normalize based on bounding box size
+    float xCenter = (xSize) / 2 - centreOffset.x;
+    float yCenter = (ySize) / 2 - centreOffset.y;
+    float zCenter = (zSize) / 2 - centreOffset.z;
+
+//    const Surfels$ filetredSurfels = surfels.data().
+    std::vector<Surfel> sub;
+    std::copy_if(surfels.begin(), surfels.end(), std::back_inserter(sub), [
+        radius,
+        centreOffset,
+        xCenter,
+        yCenter,
+        zCenter,
+        modelTransform
+    ](const Surfel& surf) {
+
+        float xDistance = surf.position.x() - xCenter ;
+        float yDistance = surf.position.y() - yCenter ;
+        float zDistance = surf.position.z() - zCenter ;
+
+        float value = sqrt(
+                           xDistance * xDistance
+                           + yDistance * yDistance
+                           + zDistance * zDistance
+                           );
+
+
+        bool isOutsideSphere = value >= radius;
+
+        bool isBehindPlane = simd_mul(
+                                      modelTransform,
+                                      simd_make_float4(
+                                                       surf.position.x(),
+                                                       surf.position.y(),
+                                                       surf.position.z(),
+                                                       1.0
+                                                       )
+                                      ).z >= 0;
+
+
+        return !isOutsideSphere || !isBehindPlane;//!isOutsideSphere;// || isBehindPlane);
+    });
+
+
+    printf("**** count %zd\n", sub.size());
+    NSData *surfelData;
+    assert(_finalized);
+    surfelData = [NSData dataWithBytes:(void *)sub.data() length:sub.size() * sizeof(Surfel)];
+
+    simd_float3 gravity = [self gravity];
+
+    return [[SCPointCloud alloc] initWithSurfelData:surfelData gravity:gravity];
+}
+
 - (void)reset
 {
     _finalized = NO;
