@@ -495,15 +495,32 @@ NS_ASSUME_NONNULL_BEGIN
 
         bool isOutsideSphere = value >= radius;
 
-        bool isBehindPlane = simd_mul(
-                                      modelTransform,
-                                      simd_make_float4(
-                                                       surf.position.x(),
-                                                       surf.position.y(),
-                                                       surf.position.z(),
-                                                       1.0
-                                                       )
-                                      ).z >= 0;
+//        simd_float4 pointPosition = simd_make_float4(
+//                                                      surf.position.x(),
+//                                                      surf.position.y(),
+//                                                      surf.position.z(),
+//                                                      1.0
+//                                                     );
+//
+//        simd_float4 transformedPointPosition = simd_mul(
+//                                                         modelTransform,
+//                                                         pointPosition
+//                                                         );
+
+        simd_float4 pointPositionOffseted = simd_make_float4(
+                                                             surf.position.x() + pointOffset.x,
+                                                             surf.position.y() + pointOffset.y,
+                                                             surf.position.z() + pointOffset.z,
+                                                             1.0
+                                                             );
+
+        simd_float4 transformedPointPositionOffseted = simd_mul(
+                                                                modelTransform,
+                                                                pointPositionOffseted
+                                                                );
+
+
+        bool isBehindPlane = transformedPointPositionOffseted.z >= 0;
 
 
         return !(isOutsideSphere || isBehindPlane);//!isOutsideSphere;// || isBehindPlane);
