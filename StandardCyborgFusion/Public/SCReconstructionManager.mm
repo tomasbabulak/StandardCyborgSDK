@@ -505,7 +505,7 @@ NS_ASSUME_NONNULL_BEGIN
                                       ).z >= 0;
 
 
-        return !isOutsideSphere || !isBehindPlane;//!isOutsideSphere;// || isBehindPlane);
+        return !(isOutsideSphere || isBehindPlane);//!isOutsideSphere;// || isBehindPlane);
     });
 
 
