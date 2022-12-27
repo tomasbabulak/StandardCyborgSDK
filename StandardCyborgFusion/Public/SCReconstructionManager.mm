@@ -478,7 +478,8 @@ NS_ASSUME_NONNULL_BEGIN
         xCenter,
         yCenter,
         zCenter,
-        modelTransform
+        modelTransform,
+        pointOffset
     ](const Surfel& surf) {
 
         float xDistance = surf.position.x() - xCenter ;
